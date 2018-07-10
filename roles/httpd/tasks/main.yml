@@ -1,0 +1,18 @@
+- name: add repository from rpm
+  yum: name=https://centos7.iuscommunity.org/ius-release.rpm state=present
+  
+- name: remove httpd
+  yum: name=httpd state=absent
+
+# 2.4.xの最新を放り込みたいけど、何かapt-util周りとかも全部更新が必要っぽい
+# 今は2.4.8が入っちゃう
+- name: install httpd
+  yum:
+    name: httpd
+    enablerepo: ius
+    state: latest
+
+- systemd:
+    name: httpd
+    enabled: yes
+    state: started

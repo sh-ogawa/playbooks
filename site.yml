@@ -1,0 +1,9 @@
+---
+- name: module
+  hosts: all
+  become: true
+  remote_user: root
+  roles:
+    - php
+    - httpd
+    - mysql

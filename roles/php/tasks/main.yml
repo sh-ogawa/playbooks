@@ -1,0 +1,12 @@
+- name: install php
+  yum: name="http://rpms.famillecollet.com/enterprise/remi-release-7.rpm"
+  
+- yum: name={{ item }} state=present enablerepo=remi
+  with_items:
+    - php72
+    - php72-php
+
+- file:
+    src: /usr/bin/php72
+    dest: /usr/bin/php
+    state: link

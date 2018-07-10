@@ -1,0 +1,41 @@
+- name: add repository from rpm
+  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm state=present
+
+- name: install mysqld
+  yum:
+    name: "{{ item }}"
+    enablerepo: mysql57-community
+    state: present
+  with_items:
+    - mysql-community-server
+    - mysql-community-client
+    - mysql-community-common
+    - mysql-community-libs
+    - mysql-community-libs-compat
+
+- name: install mysql module for ansible
+  yum:
+    name: MySQL-python
+    state: present
+
+- name: remove anonymous
+  mysql_user:
+    name: ""
+    host: "{{ item }}"
+    state: absent
+  with_items:
+    - localhost.localdomain
+    - localhost
+  when: init_flag.rc == 1
+
+- name: change password for root user
+  mysql_user:
+    name: "root"
+    host: "{{ item }}"
+    password: "srNteh8U6vnf"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost.localdomain
+    - localhost
+  when: init_flag.rc == 1
